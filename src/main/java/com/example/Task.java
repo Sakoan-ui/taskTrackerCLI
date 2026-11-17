@@ -1,20 +1,21 @@
 package com.example;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Task {
-    private final int id;
+public class Task implements Serializable {
+    private final long id;
     private String text;
     private boolean isDone;
     private LocalDateTime deadline;
 
-    public Task(int id, String text) {
+    public Task(long id, String text) {
         this.id = id;
         this.text = text;
         isDone = false;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
