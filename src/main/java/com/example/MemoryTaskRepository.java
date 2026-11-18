@@ -13,23 +13,28 @@ public class MemoryTaskRepository implements TaskRepository{
     public MemoryTaskRepository() {
         try(ObjectInputStream in = new ObjectInputStream(new FileInputStream("memory.dat"))) {
             memory = (HashMap<Long, Task>) in.readObject();
+            lastId = in.readLong();
         } catch (FileNotFoundException e) {
             memory = new HashMap<>();
+            lastId = 0;
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        lastId = 0;
+    }
+
+    private void updateMemory(){
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("memory.dat"))){
+            out.writeObject(memory);
+            out.writeLong(lastId);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void add(String text) {
-        memory.put(lastId, new Task(lastId++, text));
-        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("memory.dat"))){
-            out.writeObject(memory);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        memory.put(lastId, new Task(lastId++, text.trim()));
+        updateMemory();
     }
 
     @Override
@@ -61,16 +66,13 @@ public class MemoryTaskRepository implements TaskRepository{
     @Override
     public void done(long id) {
         memory.get(id).setDone(true);
+        updateMemory();
     }
 
     @Override
     public void delete(long id) {
         memory.remove(id);
-        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("memory.dat"))){
-            out.writeObject(memory);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        updateMemory();
     }
 
     @Override
@@ -78,5 +80,10 @@ public class MemoryTaskRepository implements TaskRepository{
         return memory.values().stream()
                 .filter(t -> t.getText().toLowerCase().contains(text.trim().toLowerCase()))
                 .toList();
+    }
+
+    public void setDeadline(long id, LocalDateTime deadLine){
+        memory.get(id).setDeadline(deadLine);
+        updateMemory();
     }
 }

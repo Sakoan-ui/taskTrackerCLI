@@ -2,6 +2,7 @@ package com.example;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class Task implements Serializable {
@@ -53,9 +54,13 @@ public class Task implements Serializable {
 
     @Override
     public String toString() {
-        return "#" + id +
-                (isDone ? "✅" : (deadline.isAfter(LocalDateTime.now()) ? "⬜" : "❌")) +
-                getDeadline().map(LocalDateTime::toString).orElse("without a deadline") +
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return "#" + id
+                + " " +
+                (isDone ? "✅" : (getDeadline().orElse(LocalDateTime.MAX).isAfter(LocalDateTime.now()) ? "⬜" : "❌"))
+                + " " +
+                getDeadline().map(formatter::format).orElse("without deadline")
+                + " " +
                 text;
     }
 }

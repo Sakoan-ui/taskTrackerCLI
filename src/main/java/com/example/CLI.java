@@ -9,7 +9,7 @@ public class CLI {
         scanner = new Scanner(System.in);
     }
 
-    public String readCommand(){
+    public String read(){
         return scanner.nextLine();
     }
 

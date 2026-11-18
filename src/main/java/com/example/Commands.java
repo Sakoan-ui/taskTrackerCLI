@@ -11,10 +11,13 @@ public enum Commands {
             "done\tmarks the task as completed\n" +
             "delete\tdeletes a task\n" +
             "search\ttasks that contain the word (case insensitive)\n" +
+            "set_deadline\t set deadline task\n" +
             "help\tlist of commands\n" +
             "exit\texit"),
-    ENTER_TASK("Enter text task"),
-    ENTER_ID("Enter ID");
+    ENTER_TEXT("Enter text"),
+    ENTER_ID("Enter ID"),
+    TRY_AGAIN("Error, try again"),
+    ENTER_DEADLINE("Enter deadline in format dd.MM.yyyy HH:mm");
     private final String text;
 
     Commands(String text) {

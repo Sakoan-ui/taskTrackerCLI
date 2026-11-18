@@ -1,5 +1,6 @@
 package com.example;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TaskRepository {
@@ -11,4 +12,5 @@ public interface TaskRepository {
     void done(long id);
     void delete(long id);
     List<Task> search(String text);
+    void setDeadline(long id, LocalDateTime deadLine);
 }
