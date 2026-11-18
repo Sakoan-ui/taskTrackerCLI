@@ -2,6 +2,7 @@ package com.example;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class Task implements Serializable {
     private final long id;
@@ -13,6 +14,13 @@ public class Task implements Serializable {
         this.id = id;
         this.text = text;
         isDone = false;
+    }
+
+    public Task(long id, String text, boolean isDone, LocalDateTime deadline) {
+        this.id = id;
+        this.text = text;
+        this.isDone = isDone;
+        this.deadline = deadline;
     }
 
     public long getId() {
@@ -35,11 +43,19 @@ public class Task implements Serializable {
         isDone = done;
     }
 
-    public LocalDateTime getDeadline() {
-        return deadline;
+    public Optional<LocalDateTime> getDeadline() {
+        return Optional.ofNullable(deadline);
     }
 
     public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
+    }
+
+    @Override
+    public String toString() {
+        return "#" + id +
+                (isDone ? "✅" : (deadline.isAfter(LocalDateTime.now()) ? "⬜" : "❌")) +
+                getDeadline().map(LocalDateTime::toString).orElse("without a deadline") +
+                text;
     }
 }
