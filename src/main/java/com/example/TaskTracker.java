@@ -8,17 +8,27 @@ public class TaskTracker {
         this.cli = new CLI();
         this.memoryTaskRepository = new MemoryTaskRepository();
     }
-    public void run(){
-        CLI.hello();
-        CLI.help();
-        String cur;
-        while (!(cur = cli.readLine()).equals("exit")){
-            switch (cur){
+
+    public void run() {
+        CLI.writeCommand(Commands.HELLO);
+        String command;
+        while (!(command = cli.readCommand().toLowerCase().trim()).equals("exit")) {
+            switch (command) {
                 case "add" -> {
-                    memoryTaskRepository.add(cli.readLine());
+                    CLI.writeCommand(Commands.ENTER_TASK);
+                    memoryTaskRepository.add(cli.readCommand());
                 }
                 case "list" -> {
-                    memoryTaskRepository.list();
+                    memoryTaskRepository.list().forEach(CLI::writeTask);
+                }
+                case "list_active" -> {
+                    memoryTaskRepository.listActive().forEach(CLI::writeTask);
+                }
+                case "list_done" -> {
+                    memoryTaskRepository.listDone().forEach(CLI::writeTask);
+                }
+                case "list_overdue" -> {
+                    memoryTaskRepository.listOverdue().forEach(CLI::writeTask);
                 }
             }
         }

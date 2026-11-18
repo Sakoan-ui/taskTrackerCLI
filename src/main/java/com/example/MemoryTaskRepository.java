@@ -40,7 +40,7 @@ public class MemoryTaskRepository implements TaskRepository{
     @Override
     public List<Task> listActive() {
         return memory.values().stream()
-                .filter(t -> !t.isDone() && t.getDeadline().isAfter(LocalDateTime.now()))
+                .filter(t -> !t.isDone() && t.getDeadline().orElse(LocalDateTime.MAX).isAfter(LocalDateTime.now()))
                 .toList();
     }
 
@@ -54,7 +54,7 @@ public class MemoryTaskRepository implements TaskRepository{
     @Override
     public List<Task> listOverdue() {
         return memory.values().stream()
-                .filter(t -> t.getDeadline().isBefore(LocalDateTime.now()))
+                .filter(t -> t.getDeadline().orElse(LocalDateTime.MAX).isBefore(LocalDateTime.now()))
                 .toList();
     }
 
