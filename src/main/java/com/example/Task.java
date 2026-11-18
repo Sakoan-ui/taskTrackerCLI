@@ -17,13 +17,6 @@ public class Task implements Serializable {
         isDone = false;
     }
 
-    public Task(long id, String text, boolean isDone, LocalDateTime deadline) {
-        this.id = id;
-        this.text = text;
-        this.isDone = isDone;
-        this.deadline = deadline;
-    }
-
     public long getId() {
         return id;
     }
